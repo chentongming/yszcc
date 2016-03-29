@@ -1,7 +1,6 @@
 package weixin
 
 import (
-	"fmt"
 	"github.com/chentongming/yszcc/application/util/config"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
 	"io/ioutil"
@@ -17,11 +16,10 @@ func MpHandler(rw http.ResponseWriter, req *http.Request) {
 		}
 		serverValid := &wxUtil.WxServerValidData{
 			Signature: req.FormValue("signature"),
-			Timestamp: int32(timeStamp),
+			Timestamp: int(timeStamp),
 			Nonce:     req.FormValue("nonce"),
 			Echostr:   req.FormValue("echostr"),
 		}
-		fmt.Println(serverValid.Calc(config.Get("token")))
 		if serverValid.Valid(config.Get("token")) {
 			rw.Write([]byte(req.FormValue("echostr")))
 		}

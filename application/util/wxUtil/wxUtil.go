@@ -7,6 +7,7 @@ import (
 	"github.com/chentongming/yszcc/application/util/requestUtil"
 	"net/url"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -24,20 +25,23 @@ func GetAccessToken(appId string, appSecret string) map[string]interface{} {
 
 type WxServerValidData struct {
 	Signature string
-	Timestamp int32
+	Timestamp int
 	Nonce     string
 	Echostr   string
 }
 
 func (validData *WxServerValidData) Calc(token string) string {
-	data := []string{token, string(validData.Timestamp), validData.Nonce}
+	data := []string{token, strconv.Itoa(validData.Timestamp), validData.Nonce}
 	sort.Strings(data)
+	fmt.Println(validData)
+	fmt.Println(strings.Join(data, "="))
 	sha1Result := sha1.Sum([]byte(strings.Join(data, "")))
 	return fmt.Sprintf("%x", sha1Result)
 
 }
 
 func (validData *WxServerValidData) Valid(token string) bool {
+	fmt.Println(validData.Calc(token), ' ', validData.Signature)
 	if validData.Calc(token) == validData.Signature {
 		return true
 	} else {
