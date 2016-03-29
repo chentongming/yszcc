@@ -7,12 +7,20 @@ import (
 
 var (
 	RootPath string
-	BasePath string
+	basePath string
 	HtmlPath string
 )
 
 func init() {
-	BasePath, _ = filepath.Abs(".")
-	RootPath = path.Join(BasePath, "application")
+	basePath, _ = filepath.Abs(".")
+	RootPath = path.Join(basePath, "application")
 	HtmlPath = path.Join(RootPath, "html")
+}
+
+func FilePath(args ...string) string {
+	filepath := RootPath
+	for _, v := range args {
+		filepath = path.Join(filepath, v)
+	}
+	return filepath
 }

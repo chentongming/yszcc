@@ -1,16 +1,36 @@
 package weixin
 
 import (
+	"fmt"
+	"github.com/chentongming/yszcc/application/util/config"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 func MpHandler(rw http.ResponseWriter, req *http.Request) {
-	bytes, _ := ioutil.ReadAll(req.Body)
-	var wxMsg wxUtil.WxMsgReceived
-	wxMsg.Set(string(bytes))
-	dealTextMsg(&wxMsg, &rw)
+	if req.Method == "GET" {
+		timeStamp, err := strconv.Atoi(req.FormValue("timestamp"))
+		if err != nil {
+			return
+		}
+		serverValid := &wxUtil.WxServerValidData{
+			Signature: req.FormValue("signature"),
+			Timestamp: int32(timeStamp),
+			Nonce:     req.FormValue("nonce"),
+			Echostr:   req.FormValue("echostr"),
+		}
+		if serverValid.Valid(config.Get("token")) {
+			http.ResponseWriter(*rw).Write([]byte(req.FormValue("echostr")))
+		}
+	} else {
+		bytes, _ := ioutil.ReadAll(req.Body)
+		var wxMsg wxUtil.WxMsgReceived
+		wxMsg.Set(string(bytes))
+		dealTextMsg(&wxMsg, &rw)
+	}
+
 }
 
 func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
