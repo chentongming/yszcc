@@ -1,8 +1,8 @@
 package weixin
 
 import (
-	"fmt"
 	"github.com/chentongming/yszcc/application/util/config"
+	"github.com/chentongming/yszcc/application/util/logger"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
 	"io/ioutil"
 	"net/http"
@@ -12,7 +12,7 @@ import (
 
 func MpHandler(rw http.ResponseWriter, req *http.Request) {
 	bytes, _ := ioutil.ReadAll(req.Body)
-	fmt.Println("income request:", req.RequestURI, " data:", string(bytes))
+	logger.Info(req.RequestURI, "info")
 	if req.Method == "GET" {
 		timeStamp, err := strconv.Atoi(req.FormValue("timestamp"))
 		if err != nil {

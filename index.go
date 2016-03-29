@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/chentongming/yszcc/application/controller"
 	"github.com/chentongming/yszcc/application/controller/weixin"
 	"github.com/chentongming/yszcc/application/util"
 	"github.com/chentongming/yszcc/application/util/config"
-	"log"
+	"github.com/chentongming/yszcc/application/util/logger"
 	"net/http"
 	"os"
 )
@@ -27,8 +26,15 @@ func init() {
 }
 
 func main() {
-	http.HandleFunc("/weixin_mp/msg", weixin.MpHandler)
-	http.HandleFunc("/", controller.IndexHandler)
-	fmt.Println(":" + config.Get("port"))
-	log.Fatal(http.ListenAndServe(":"+config.Get("port"), nil))
+	logger.Info("Listen port:"+config.Get("port")+" start", "info")
+	all := map[string]func(rw http.ResponseWriter, req *http.Request){
+		"/weixin_mp/msg": weixin.MpHandler,
+		"/":              controller.IndexHandler,
+	}
+	for pattern, handler := range all {
+		http.HandleFunc(pattern, handler)
+		logger.Info("pattern:"+pattern+",regist handler ", "info")
+	}
+
+	http.ListenAndServe(":"+config.Get("port"), nil)
 }
