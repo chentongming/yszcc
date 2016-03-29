@@ -33,15 +33,12 @@ type WxServerValidData struct {
 func (validData *WxServerValidData) Calc(token string) string {
 	data := []string{token, strconv.Itoa(validData.Timestamp), validData.Nonce}
 	sort.Strings(data)
-	fmt.Println(validData)
-	fmt.Println(strings.Join(data, "="))
 	sha1Result := sha1.Sum([]byte(strings.Join(data, "")))
 	return fmt.Sprintf("%x", sha1Result)
 
 }
 
 func (validData *WxServerValidData) Valid(token string) bool {
-	fmt.Println(validData.Calc(token), ' ', validData.Signature)
 	if validData.Calc(token) == validData.Signature {
 		return true
 	} else {

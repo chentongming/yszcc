@@ -1,6 +1,7 @@
 package weixin
 
 import (
+	"fmt"
 	"github.com/chentongming/yszcc/application/util/config"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
 	"io/ioutil"
@@ -9,6 +10,9 @@ import (
 )
 
 func MpHandler(rw http.ResponseWriter, req *http.Request) {
+	bytes, _ := ioutil.ReadAll(req.Body)
+	fmt.Println("post", string(bytes))
+	fmt.Println("income request:", req.RequestURI, " data:", string(bytes))
 	if req.Method == "GET" {
 		timeStamp, err := strconv.Atoi(req.FormValue("timestamp"))
 		if err != nil {
@@ -24,7 +28,6 @@ func MpHandler(rw http.ResponseWriter, req *http.Request) {
 			rw.Write([]byte(req.FormValue("echostr")))
 		}
 	} else {
-		bytes, _ := ioutil.ReadAll(req.Body)
 		var wxMsg wxUtil.WxMsgReceived
 		wxMsg.Set(string(bytes))
 		dealTextMsg(&wxMsg, &rw)
