@@ -1,7 +1,6 @@
 package weixin
 
 import (
-	"fmt"
 	"github.com/chentongming/yszcc/application/util/config"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
 	"io/ioutil"
