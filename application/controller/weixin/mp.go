@@ -7,11 +7,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func MpHandler(rw http.ResponseWriter, req *http.Request) {
 	bytes, _ := ioutil.ReadAll(req.Body)
-	fmt.Println("post", string(bytes))
 	fmt.Println("income request:", req.RequestURI, " data:", string(bytes))
 	if req.Method == "GET" {
 		timeStamp, err := strconv.Atoi(req.FormValue("timestamp"))
@@ -24,7 +24,7 @@ func MpHandler(rw http.ResponseWriter, req *http.Request) {
 			Nonce:     req.FormValue("nonce"),
 			Echostr:   req.FormValue("echostr"),
 		}
-		if serverValid.Valid(config.Get("token")) {
+		if serverValid.Valid(config.Get("wxToken")) {
 			rw.Write([]byte(req.FormValue("echostr")))
 		}
 	} else {
@@ -36,5 +36,11 @@ func MpHandler(rw http.ResponseWriter, req *http.Request) {
 }
 
 func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
-	http.ResponseWriter(*rw).Write([]byte(wxTextMsg.Content))
+	wxResponseText := wxUtil.WxResponseText{
+		ToUserName:   wxTextMsg.FromUserName,
+		FromUserName: config.Get("wxUser"),
+		CreateTime:   int(time.Now().Unix()),
+		Content:      wxTextMsg.Content,
+	}
+	http.ResponseWriter(*rw).Write([]byte(wxResponseText.ToXml()))
 }
