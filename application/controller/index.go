@@ -18,3 +18,11 @@ func IndexHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 	indexTemplate.ExecuteTemplate(rw, "index.html", map[string]string{"a": "q"})
 }
+
+func HwHandler(rw http.ResponseWriter, req *http.Request) {
+	logger.Info(req.RequestURI, "info")
+	rw.Write([]byte("hello world"))
+}
+func HwHandler2(rw http.ResponseWriter, req *http.Request) {
+	rw.Write([]byte("hello world"))
+}

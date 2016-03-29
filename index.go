@@ -30,6 +30,8 @@ func main() {
 	all := map[string]func(rw http.ResponseWriter, req *http.Request){
 		"/weixin_mp/msg": weixin.MpHandler,
 		"/":              controller.IndexHandler,
+		"/hw":            controller.HwHandler,
+		"/hw2":           controller.HwHandler2,
 	}
 	for pattern, handler := range all {
 		http.HandleFunc(pattern, handler)
