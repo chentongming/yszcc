@@ -41,6 +41,7 @@ func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
 		FromUserName: config.Get("wxUser"),
 		CreateTime:   int(time.Now().Unix()),
 		Content:      wxTextMsg.Content,
+		MsgType:      "text",
 	}
 	http.ResponseWriter(*rw).Write([]byte(wxResponseText.ToXml()))
 }
