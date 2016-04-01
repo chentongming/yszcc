@@ -1,6 +1,7 @@
 package weixin
 
 import (
+	"github.com/chentongming/yszcc/application/service/mp"
 	"github.com/chentongming/yszcc/application/util/config"
 	"github.com/chentongming/yszcc/application/util/logger"
 	"github.com/chentongming/yszcc/application/util/wxUtil"
@@ -40,7 +41,7 @@ func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
 		ToUserName:   wxTextMsg.FromUserName,
 		FromUserName: config.Get("wxUser"),
 		CreateTime:   int(time.Now().Unix()),
-		Content:      wxTextMsg.Content,
+		Content:      mp.Sh(),
 		MsgType:      "text",
 	}
 	http.ResponseWriter(*rw).Write([]byte(wxResponseText.ToXml()))
