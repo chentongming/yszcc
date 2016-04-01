@@ -37,11 +37,19 @@ func MpHandler(rw http.ResponseWriter, req *http.Request) {
 }
 
 func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
+	var content string
+	if wxTextMsg.Content == "上证" {
+		stockCode := "sh000001"
+		content = mp.Sh(stockCode)
+	} else if wxTextMsg.Content == "深成" {
+		stockCode := "sz399001"
+		content = mp.Sh(stockCode)
+	}
 	wxResponseText := wxUtil.WxResponseText{
 		ToUserName:   wxTextMsg.FromUserName,
 		FromUserName: config.Get("wxUser"),
 		CreateTime:   int(time.Now().Unix()),
-		Content:      mp.Sh(),
+		Content:      content,
 		MsgType:      "text",
 	}
 	http.ResponseWriter(*rw).Write([]byte(wxResponseText.ToXml()))

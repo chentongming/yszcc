@@ -17,8 +17,7 @@ var template = `
 成交量:%s手
 成交额:%s元`
 
-func Sh() string {
-	stockCode := "sh000001"
+func Sh(stockCode string) string {
 	info := sinaStock(stockCode)
 	return fmt.Sprintf(template,
 		info.StockName,
