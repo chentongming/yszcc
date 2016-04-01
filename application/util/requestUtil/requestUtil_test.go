@@ -1,4 +1,4 @@
-package test
+package requestUtil
 
 import (
 	"github.com/chentongming/yszcc/application/util/requestUtil"

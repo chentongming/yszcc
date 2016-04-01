@@ -1,4 +1,4 @@
-package test
+package wxUtil
 
 import (
 	"github.com/chentongming/yszcc/application/util/wxUtil"
