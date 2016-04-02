@@ -44,6 +44,8 @@ func dealTextMsg(wxTextMsg *wxUtil.WxMsgReceived, rw *http.ResponseWriter) {
 	} else if wxTextMsg.Content == "深成" {
 		stockCode := "sz399001"
 		content = mp.Sh(stockCode)
+	} else {
+		content = wxTextMsg.Content
 	}
 	wxResponseText := wxUtil.WxResponseText{
 		ToUserName:   wxTextMsg.FromUserName,
