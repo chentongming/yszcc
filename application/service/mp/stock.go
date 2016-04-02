@@ -18,7 +18,7 @@ var template = `
 成交额:%s元`
 
 func Sh(stockCode string) string {
-	info := sinaStock(stockCode)
+	info := SinaStock(stockCode)
 	return fmt.Sprintf(template,
 		info.StockName,
 		info.StockCode,
@@ -30,7 +30,7 @@ func Sh(stockCode string) string {
 		info.DayTotal)
 }
 
-func sinaStock(stockCode string) *StockInfo {
+func SinaStock(stockCode string) *StockInfo {
 	info := new(StockInfo)
 	sh := "http://hq.sinajs.cn/rn=1459529465729&list=" + stockCode
 	response, err := http.Get(sh)
